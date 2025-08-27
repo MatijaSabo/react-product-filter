@@ -98,8 +98,23 @@ const ProductGrid = ({ products }: Props) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", String(event.selected + 1));
     replace(`${pathname}?${params.toString()}`);
-    
+
     setOffset(event.selected);
+  };
+
+  const getInitialPagination = () => {
+    // Handling case when not number is added
+    // Handling case when to low number is added
+    // Handling case when to high number is added
+
+    const searchTerm = searchParams.get("page");
+    return (
+      (Number(searchTerm) &&
+        Number(searchTerm) - 1 >= 0 &&
+        Number(searchTerm) - 1 <= filteredProducts.length &&
+        Number(searchTerm) - 1) ||
+      0
+    );
   };
 
   return (
@@ -134,7 +149,8 @@ const ProductGrid = ({ products }: Props) => {
       </div>
       <div className="min-h-100 border-2 border-dashed border-gray-400 rounded-lg p-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filteredProducts && filteredProducts.flat().length > 0 &&
+          {filteredProducts &&
+            filteredProducts.flat().length > 0 &&
             filteredProducts[offset].map((item) => {
               return (
                 <div className="relative p-4 shadow-lg" key={item.title}>
@@ -162,7 +178,7 @@ const ProductGrid = ({ products }: Props) => {
           nextLabel="Next"
           onPageChange={handlePaginationClick}
           pageRangeDisplayed={5}
-          initialPage={(Number(searchParams.get("page")) - 1) || 0}
+          initialPage={getInitialPagination()}
           pageCount={filteredProducts.length}
           previousLabel="Previous"
           renderOnZeroPageCount={null}
