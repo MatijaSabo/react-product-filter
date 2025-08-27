@@ -95,6 +95,10 @@ const ProductGrid = ({ products }: Props) => {
   };
 
   const handlePaginationClick = (event: { selected: number }) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", String(event.selected + 1));
+    replace(`${pathname}?${params.toString()}`);
+    
     setOffset(event.selected);
   };
 
@@ -158,6 +162,7 @@ const ProductGrid = ({ products }: Props) => {
           nextLabel="Next"
           onPageChange={handlePaginationClick}
           pageRangeDisplayed={5}
+          initialPage={(Number(searchParams.get("page")) - 1) || 0}
           pageCount={filteredProducts.length}
           previousLabel="Previous"
           renderOnZeroPageCount={null}
