@@ -3,6 +3,9 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
+import { IconX } from "@tabler/icons-react";
+
 export const FilterTags = () => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -45,13 +48,13 @@ export const FilterTags = () => {
 
     // Handle URL
     const params = new URLSearchParams(searchParams);
-    
+
     if (newSet.size > 0) {
-        params.set("category", [...newSet].join(","));
+      params.set("category", [...newSet].join(","));
     } else {
-        params.delete("category");
+      params.delete("category");
     }
-    
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -59,44 +62,26 @@ export const FilterTags = () => {
     <div className="grid auto-cols-max grid-flow-col gap-x-2 py-4">
       {[...categories].map((option) => {
         return (
-          <div key={option as string} className="flex px-4 py-2 bg-gray-200">
-            <div>{option as string}</div>
-            <div className="pl-4">
-              <button
-                className="text-grey-300 cursor-pointer"
-                onClick={() => clearCategory(option as string)}
-              >
-                X
-              </button>
-            </div>
-          </div>
+          <Button
+            key={option as string}
+            onClick={() => clearCategory(option as string)}
+            variant="secondary"
+            size="sm"
+          >
+            <IconX /> {option as string}
+          </Button>
         );
       })}
+
       {minPrice && (
-        <div className="flex px-4 py-2 bg-gray-200">
-          <div>Min: {minPrice}$</div>
-          <div className="pl-4">
-            <button
-              className="text-grey-300 cursor-pointer text-sm font-bold"
-              onClick={() => clearMinPrice()}
-            >
-              X
-            </button>
-          </div>
-        </div>
+        <Button onClick={() => clearMinPrice()} variant="secondary" size="sm">
+          <IconX /> Min: {minPrice}$
+        </Button>
       )}
       {maxPrice && (
-        <div className="flex px-4 py-2 bg-gray-200">
-          <div>Max: {maxPrice}$</div>
-          <div className="pl-4">
-            <button
-              className="text-grey-300 cursor-pointer text-sm font-bold"
-              onClick={() => clearMaxPrice()}
-            >
-              X
-            </button>
-          </div>
-        </div>
+        <Button onClick={() => clearMaxPrice()} variant="secondary" size="sm">
+          <IconX /> Max: {maxPrice}$
+        </Button>
       )}
     </div>
   );
